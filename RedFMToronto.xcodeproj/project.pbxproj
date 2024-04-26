@@ -27,6 +27,7 @@
 		C160FBED2BDC0A4600D98571 /* PlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayView.swift; sourceTree = "<group>"; };
 		C160FBF32BDC612300D98571 /* ChannelRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelRow.swift; sourceTree = "<group>"; };
 		C160FBF52BDC616700D98571 /* PlayPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayPad.swift; sourceTree = "<group>"; };
+		C160FBF72BDC68CA00D98571 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +60,7 @@
 		C160FBD82BDBEA9A00D98571 /* RedFMToronto */ = {
 			isa = PBXGroup;
 			children = (
+				C160FBF72BDC68CA00D98571 /* Info.plist */,
 				C160FBD92BDBEA9A00D98571 /* RedFMTorontoApp.swift */,
 				C160FBE72BDC045F00D98571 /* Channel.swift */,
 				C160FBED2BDC0A4600D98571 /* PlayView.swift */,
@@ -291,6 +293,7 @@
 				DEVELOPMENT_TEAM = 2GG6WSV6PN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RedFMToronto/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -320,6 +323,7 @@
 				DEVELOPMENT_TEAM = 2GG6WSV6PN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RedFMToronto/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

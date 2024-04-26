@@ -22,23 +22,24 @@ struct PlayPad: View {
     @State private var player = AVPlayer()
     
     var body: some View {
-        NavigationView {
-            ScrollView {
-                LazyVStack(spacing: 10) {
-                    ForEach(channels, id: \.self) { channel in
-                        ChannelRow(channel: channel, isPlaying: playingChannels[channel, default: false], togglePlay: togglePlay)
-                            .padding(.vertical, 4)
-                            .background(Color.white)
-                            .cornerRadius(12)
-                            .shadow(color: .gray.opacity(0.4), radius: 5, x: 0, y: 2)
-                    }
-                }
-                .padding(.horizontal)
-            }
-            .navigationTitle("Radio Channels")
-            .navigationBarTitleDisplayMode(.large)
-        }
-    }
+         NavigationView {
+             ScrollView {
+                 LazyVStack(spacing: 1) {
+                     ForEach(channels, id: \.self) { channel in
+                         ChannelRow(channel: channel, isPlaying: playingChannels[channel, default: false], togglePlay: togglePlay)
+                             .padding(.vertical, 5)
+                             .cornerRadius(15)
+                             .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
+                     }
+                 }
+                 .padding(.horizontal)
+                 .background(Color(UIColor.systemGroupedBackground)) // Adapt to light/dark mode
+             }
+             .navigationTitle("Radio Channels")
+             .navigationBarTitleDisplayMode(.large)
+             .background(Color(UIColor.systemGroupedBackground).edgesIgnoringSafeArea(.all))
+         }
+     }
     
     private func togglePlay(for channel: Channel) {
         if playingChannels[channel, default: false] {
@@ -57,12 +58,27 @@ struct PlayPad: View {
         player.play()
         playingChannels[channel] = true
         currentPlayer = channel
+        
+        // Add the following lines to start playback in background
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("Error setting up audio session: \(error)")
+        }
     }
     
     private func stopPlayback() {
         player.pause()
         if let currentChannel = currentPlayer {
             playingChannels[currentChannel] = false
+        }
+        
+        // Add the following lines to stop playback in background
+        do {
+            try AVAudioSession.sharedInstance().setActive(false)
+        } catch {
+            print("Error stopping audio session: \(error)")
         }
     }
 }

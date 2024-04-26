@@ -16,7 +16,7 @@ struct ChannelRow: View {
         HStack {
             Text(channel.name)
                 .font(.headline)
-                .fontWeight(.bold)
+                .fontWeight(.medium)
                 .foregroundColor(.primary)
 
             Spacer()
@@ -33,6 +33,13 @@ struct ChannelRow: View {
             .buttonStyle(PlainButtonStyle())
         }
         .padding()
+        .background(background(for: isPlaying)) // Correct usage of background method
+        .cornerRadius(10)
+    }
+    
+    // Function to return Color based on playing state
+    private func background(for isPlaying: Bool) -> Color {
+        return isPlaying ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2)
     }
 }
 

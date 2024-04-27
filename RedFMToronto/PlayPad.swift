@@ -13,8 +13,6 @@ struct PlayPad: View {
     
     @ObservedObject var channelManager = ChannelManager.shared // Add this line
     
-    
-    @State private var playingChannels: [Channel: Bool] = [:]
     @State private var currentPlayer: Channel?
     
     var body: some View {
@@ -22,7 +20,7 @@ struct PlayPad: View {
             ScrollView {
                 LazyVStack(spacing: 1) {
                     ForEach(channelManager.channels, id: \.self) { channel in
-                        ChannelRow(channel: channel, isPlaying: playingChannels[channel, default: false], togglePlay: togglePlay)
+                        ChannelRow(channel: channel, isPlaying: channelManager.playingChannels[channel, default: false], togglePlay: togglePlay)
                             .padding(.vertical, 5)
                             .cornerRadius(15)
                             .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
@@ -38,54 +36,22 @@ struct PlayPad: View {
     }
     
     private func togglePlay(for channel: Channel) {
-        if playingChannels[channel, default: false] {
-            stopPlayback()
+        if channelManager.playingChannels[channel, default: false] {
+            channelManager.stopPlayback()
         } else {
-            startPlayback(for: channel)
-        }
-    }
-    
-    private func startPlayback(for channel: Channel) {
-        if let currentChannel = currentPlayer {
-            playingChannels[currentChannel] = false
-        }
-        let playerItem = AVPlayerItem(url: channel.url)
-        audioPlayer.replaceCurrentItem(with: playerItem)
-        audioPlayer.play()
-        playingChannels[channel] = true
-        currentPlayer = channel
-        
-        // Add the following lines to start playback in background
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-            try AVAudioSession.sharedInstance().setActive(true)
-        } catch {
-            print("Error setting up audio session: \(error)")
-        }
-    }
-    
-    private func stopPlayback() {
-        audioPlayer.pause()
-        if let currentChannel = currentPlayer {
-            playingChannels[currentChannel] = false
-        }
-        
-        // Add the following lines to stop playback in background
-        do {
-            try AVAudioSession.sharedInstance().setActive(false)
-        } catch {
-            print("Error stopping audio session: \(error)")
+            if let index = channelManager.channels.firstIndex(of: channel) {
+                channelManager.currentChannelIndex = index
+            }
+            channelManager.startPlayback(for: channel)
         }
     }
     
     private func nextChannel() {
         channelManager.nextChannel()
-        startPlayback(for: channelManager.channels[channelManager.currentChannelIndex])
     }
     
     private func previousChannel() {
         channelManager.previousChannel()
-        startPlayback(for: channelManager.channels[channelManager.currentChannelIndex])
     }
 }
 

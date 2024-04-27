@@ -36,27 +36,19 @@ struct RedFMTorontoApp: App {
                     // Handle remote commands
                     let commandCenter = MPRemoteCommandCenter.shared()
                     commandCenter.playCommand.addTarget { _ in
-                        audioPlayer.play()
+                        channelManager.startPlayback(for: channelManager.channels[channelManager.currentChannelIndex])
                         return .success
                     }
                     commandCenter.pauseCommand.addTarget { _ in
-                        audioPlayer.pause()
+                        channelManager.stopPlayback()
                         return .success
                     }
                     commandCenter.previousTrackCommand.addTarget { _ in
                         channelManager.previousChannel()
-                        let currentChannel = channelManager.channels[channelManager.currentChannelIndex]
-                        let playerItem = AVPlayerItem(url: currentChannel.url)
-                        audioPlayer.replaceCurrentItem(with: playerItem)
-                        audioPlayer.play()
                         return .success
                     }
                     commandCenter.nextTrackCommand.addTarget { _ in
                         channelManager.nextChannel()
-                        let currentChannel = channelManager.channels[channelManager.currentChannelIndex]
-                        let playerItem = AVPlayerItem(url: currentChannel.url)
-                        audioPlayer.replaceCurrentItem(with: playerItem)
-                        audioPlayer.play()
                         return .success
                     }
                 }

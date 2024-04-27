@@ -6,34 +6,73 @@
 //
 
 import Foundation
+import AVFoundation
 
 
 class ChannelManager: ObservableObject {
     static let shared = ChannelManager()
     
+    var audioPlayer = AudioPlayer()
+    var currentPlayer: Channel?
+    
     var channels: [Channel] = [
         Channel(name: "RED FM Toronto", url: URL(string: "https://ice9.securenetsystems.net/CIRVFM")!),
-        Channel(name: "RED FM Calgary", url: URL(string: "https://ice10.securenetsystems.net/CKYR")!),
         Channel(name: "RED FM Mumbai", url: URL(string: "https://funasia.streamguys1.com/live9")!),
         Channel(name: "Radio City Mumbai", url: URL(string: "https://prclive4.listenon.in/Hindi")!),
-        Channel(name: "Vividh Bharti - 100.1", url: URL(string: "https://air.pc.cdn.bitgravity.com/air/live/pbaudio001/playlist.m3u8")!)
+        Channel(name: "Vividh Bharti", url: URL(string: "https://air.pc.cdn.bitgravity.com/air/live/pbaudio001/playlist.m3u8")!),
+        Channel(name: "AIR - Suratgarh", url: URL(string: "https://air.pc.cdn.bitgravity.com/air/live/pbaudio064/chunklist.m3u8")!)
     ]
     
-    @Published var currentChannelIndex = -1
+    @Published var playingChannels: [Channel: Bool] = [:]
+    @Published var currentChannelIndex = -1 {
+        didSet {
+            if currentChannelIndex != -1 {
+                playingChannels[channels[currentChannelIndex]] = true
+            }
+        }
+    }
+    
+    func startPlayback(for channel: Channel) {
+        print("Starting playback for channel: \(channel.name)")
+        if let currentChannel = currentPlayer {
+            playingChannels[currentChannel] = false
+        }
+        let playerItem = AVPlayerItem(url: channel.url)
+        audioPlayer.replaceCurrentItem(with: playerItem)
+        audioPlayer.play()
+        playingChannels[channel] = true
+        currentPlayer = channel
+        
+        // Add the following lines to start playback in background
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("Error setting up audio session: \(error)")
+        }
+    }
+    
+    func stopPlayback() {
+        audioPlayer.pause()
+        if let currentChannel = currentPlayer {
+            playingChannels[currentChannel] = false
+        }
+        
+        // Add the following lines to stop playback in background
+        do {
+            try AVAudioSession.sharedInstance().setActive(false)
+        } catch {
+            print("Error stopping audio session: \(error)")
+        }
+    }
     
     func nextChannel() {
-        if currentChannelIndex < channels.count - 1 {
-            currentChannelIndex += 1
-        } else {
-            currentChannelIndex = 0
-        }
+        currentChannelIndex = (currentChannelIndex + 1) % channels.count
+        startPlayback(for: channels[currentChannelIndex])
     }
 
     func previousChannel() {
-        if currentChannelIndex > 0 {
-            currentChannelIndex -= 1
-        } else {
-            currentChannelIndex = channels.count - 1
-        }
+        currentChannelIndex = (currentChannelIndex - 1 + channels.count) % channels.count
+        startPlayback(for: channels[currentChannelIndex])
     }
 }

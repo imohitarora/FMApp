@@ -15,43 +15,69 @@ struct PlayPad: View {
     
     @State private var currentPlayer: Channel?
     
+    @State private var isPlaying = false
+    
     var body: some View {
-        NavigationView {
-            ScrollView(.vertical, showsIndicators: false) {
-                LazyVStack(spacing: 1) {
-                    ForEach(channelManager.channels, id: \.self) { channel in
-                        ChannelRow(channel: channel, isPlaying: channelManager.playingChannels[channel, default: false], togglePlay: togglePlay)
-                            .padding(.vertical, 5)
-                            .cornerRadius(15)
-                            .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
+        ZStack(alignment: .bottom) {            
+            NavigationView {
+                ScrollView(.vertical, showsIndicators: false) {
+                    LazyVStack(spacing: 1) {
+                        ForEach(channelManager.channels, id: \.self) { channel in
+                            ChannelRow(channel: channel, isPlaying: channelManager.playingChannels[channel, default: false], togglePlay: togglePlay)
+                                .padding(.vertical, 5)
+                                .cornerRadius(15)
+                                .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
+                        }
                     }
+                    .padding(.horizontal)
+                    .background(Color(UIColor.systemGroupedBackground)) // Adapt to light/dark mode
                 }
-                .padding(.horizontal)
-                .background(Color(UIColor.systemGroupedBackground)) // Adapt to light/dark mode
+                .padding(.bottom, isPlaying ? 50 : 0) // Add this
+                .navigationTitle("Radio Channels")
+                .navigationBarTitleDisplayMode(.large)
+                .background(Color(UIColor.systemGroupedBackground).edgesIgnoringSafeArea(.all))
             }
-            .navigationTitle("Radio Channels")
-            .navigationBarTitleDisplayMode(.large)
-            .background(Color(UIColor.systemGroupedBackground).edgesIgnoringSafeArea(.all))
+            if isPlaying {
+                Spacer()
+                PlaybackControls(
+                    isPlaying: isPlaying,
+                    currentChannel: currentPlayer,
+                    playPauseAction: {
+                        togglePlay(for: currentPlayer!)
+                    },
+                    nextAction: nextChannel,
+                    previousAction: previousChannel
+                )
+                .frame(maxWidth: .infinity)
+                .background(Color(UIColor.systemGroupedBackground))
+                .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
+            }
         }
     }
     
     private func togglePlay(for channel: Channel) {
         if channelManager.playingChannels[channel, default: false] {
             channelManager.stopPlayback()
+            currentPlayer = nil
+            isPlaying = false
         } else {
             if let index = channelManager.channels.firstIndex(of: channel) {
                 channelManager.currentChannelIndex = index
             }
             channelManager.startPlayback(for: channel)
+            currentPlayer = channel
+            isPlaying = true
         }
     }
-    
+
     private func nextChannel() {
         channelManager.nextChannel()
+        currentPlayer = channelManager.channels[channelManager.currentChannelIndex]
     }
-    
+
     private func previousChannel() {
         channelManager.previousChannel()
+        currentPlayer = channelManager.channels[channelManager.currentChannelIndex]
     }
 }
 

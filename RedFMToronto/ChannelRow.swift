@@ -24,11 +24,11 @@ struct ChannelRow: View {
             Button(action: {
                 togglePlay(channel)
             }) {
-                Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                Image(systemName: isPlaying ? "pause.circle" : "play.circle")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 40, height: 40)
-                    .foregroundColor(isPlaying ? .red : .green)
+                    .frame(width: 30, height: 30)
+                    .foregroundColor(.blue)
             }
             .buttonStyle(PlainButtonStyle())
         }

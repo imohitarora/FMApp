@@ -8,11 +8,45 @@
 import SwiftUI
 
 struct PlaybackControls: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+    let isPlaying: Bool
+        let currentChannel: Channel?
+        let playPauseAction: () -> Void
+        let nextAction: () -> Void
+        let previousAction: () -> Void
 
-#Preview {
-    PlaybackControls()
+        var body: some View {
+            HStack {
+                // Now Playing information
+                VStack(alignment: .leading) {
+                    Text("Now Playing:")
+                        .font(.caption)
+                    Text(currentChannel?.name ?? "Song Title - Artist Name")
+                        .font(.headline)
+                }
+                Spacer()
+                // Playback controls
+                HStack {
+                    Button(action: previousAction) {
+                        Image(systemName: "backward.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 30, height: 30)
+                    }
+                    Button(action: playPauseAction) {
+                        Image(systemName: isPlaying ? "stop.circle" : "play.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 30, height: 30)
+                    }
+                    Button(action: nextAction) {
+                        Image(systemName: "forward.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 30, height: 30)
+                    }
+                }
+            }
+            .padding()
+            .cornerRadius(10)
+        }
 }

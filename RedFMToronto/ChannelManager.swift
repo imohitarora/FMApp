@@ -19,7 +19,7 @@ class ChannelManager: ObservableObject {
         Channel(name: "Vividh Bharti - 100.1", url: URL(string: "https://air.pc.cdn.bitgravity.com/air/live/pbaudio001/playlist.m3u8")!)
     ]
     
-    @Published var currentChannelIndex = 0
+    @Published var currentChannelIndex = -1
     
     func nextChannel() {
         if currentChannelIndex < channels.count - 1 {

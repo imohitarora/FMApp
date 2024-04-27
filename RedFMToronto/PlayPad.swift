@@ -22,7 +22,7 @@ struct PlayPad: View {
             ScrollView {
                 LazyVStack(spacing: 1) {
                     ForEach(channelManager.channels, id: \.self) { channel in
-                        ChannelRow(channel: channel, isPlaying: channelManager.currentChannelIndex == channelManager.channels.firstIndex(of: channel), togglePlay: togglePlay)
+                        ChannelRow(channel: channel, isPlaying: playingChannels[channel, default: false], togglePlay: togglePlay)
                             .padding(.vertical, 5)
                             .cornerRadius(15)
                             .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)

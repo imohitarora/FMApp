@@ -17,7 +17,7 @@ struct PlayPad: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
+            ScrollView(.vertical, showsIndicators: false) {
                 LazyVStack(spacing: 1) {
                     ForEach(channelManager.channels, id: \.self) { channel in
                         ChannelRow(channel: channel, isPlaying: channelManager.playingChannels[channel, default: false], togglePlay: togglePlay)

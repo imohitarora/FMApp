@@ -7,6 +7,7 @@
 
 import Foundation
 import AVFoundation
+import MediaPlayer
 
 
 class ChannelManager: ObservableObject {
@@ -38,6 +39,27 @@ class ChannelManager: ObservableObject {
         }
     }
     
+    let nowPlayingInfo = MPNowPlayingInfoCenter.default()
+    
+    func updateNowPlayingInfo() {
+        if currentChannelIndex != -1 {
+            let currentChannel = channels[currentChannelIndex]
+            nowPlayingInfo.nowPlayingInfo = [
+                MPMediaItemPropertyTitle: currentChannel.name,
+                MPMediaItemPropertyArtist: "", // Update with actual artist name
+                MPNowPlayingInfoPropertyPlaybackRate: 1.0,
+                MPNowPlayingInfoPropertyIsLiveStream: true
+            ]
+        } else {
+            nowPlayingInfo.nowPlayingInfo = [
+                MPMediaItemPropertyTitle: "No Channel Selected",
+                MPMediaItemPropertyArtist: "",
+                MPNowPlayingInfoPropertyPlaybackRate: 1.0,
+                MPNowPlayingInfoPropertyIsLiveStream: true
+            ]
+        }
+    }
+    
     func startPlayback(for channel: Channel) {
         print("Starting playback for channel: \(channel.name)")
         if let currentChannel = currentPlayer {
@@ -49,6 +71,8 @@ class ChannelManager: ObservableObject {
         playingChannels[channel] = true
         currentPlayer = channel
         
+        updateNowPlayingInfo()
+        
         // Add the following lines to start playback in background
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
@@ -59,7 +83,7 @@ class ChannelManager: ObservableObject {
     }
     
     func stopPlayback() {
-        audioPlayer.pause()
+        audioPlayer.stop()
         if let currentChannel = currentPlayer {
             playingChannels[currentChannel] = false
         }
@@ -75,10 +99,12 @@ class ChannelManager: ObservableObject {
     func nextChannel() {
         currentChannelIndex = (currentChannelIndex + 1) % channels.count
         startPlayback(for: channels[currentChannelIndex])
+        updateNowPlayingInfo()
     }
-
+    
     func previousChannel() {
         currentChannelIndex = (currentChannelIndex - 1 + channels.count) % channels.count
         startPlayback(for: channels[currentChannelIndex])
+        updateNowPlayingInfo()
     }
 }

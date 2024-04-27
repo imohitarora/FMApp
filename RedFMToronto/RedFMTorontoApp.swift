@@ -25,14 +25,6 @@ struct RedFMTorontoApp: App {
                         print("Error setting up audio session: \(error)")
                     }
                     
-                    // Update the now-playing information
-                    let nowPlayingInfo = MPNowPlayingInfoCenter.default()
-                    nowPlayingInfo.nowPlayingInfo = [
-                        MPMediaItemPropertyTitle: "Song Title",
-                        MPMediaItemPropertyArtist: "Artist Name",
-                        MPNowPlayingInfoPropertyPlaybackRate: 1.0
-                    ]
-                    
                     // Handle remote commands
                     let commandCenter = MPRemoteCommandCenter.shared()
                     commandCenter.playCommand.addTarget { _ in

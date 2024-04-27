@@ -42,7 +42,3 @@ struct ChannelRow: View {
         return isPlaying ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2)
     }
 }
-
-//#Preview {
-//    ChannelRow()
-//}

@@ -9,11 +9,13 @@ import SwiftUI
 import AVFoundation
 
 struct ContentView: View {
+    @StateObject var audioPlayer: AudioPlayer
+
     var body: some View {
-        PlayPad()
+        PlayPad(audioPlayer: audioPlayer)
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(audioPlayer: AudioPlayer())
 }

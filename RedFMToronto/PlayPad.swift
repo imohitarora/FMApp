@@ -9,37 +9,33 @@ import SwiftUI
 import AVFoundation
 
 struct PlayPad: View {
-    @State private var channels: [Channel] = [
-        Channel(name: "RED FM Toronto", url: URL(string: "https://ice9.securenetsystems.net/CIRVFM")!),
-        Channel(name: "RED FM Calgary", url: URL(string: "https://ice10.securenetsystems.net/CKYR")!),
-        Channel(name: "RED FM Mumbai", url: URL(string: "https://funasia.streamguys1.com/live9")!),
-        Channel(name: "Radio City Mumbai", url: URL(string: "https://prclive4.listenon.in/Hindi")!),
-        Channel(name: "Vividh Bharti - 100.1", url: URL(string: "https://air.pc.cdn.bitgravity.com/air/live/pbaudio001/playlist.m3u8")!)
-    ]
+    @StateObject var audioPlayer = AudioPlayer()
+    
+    @ObservedObject var channelManager = ChannelManager.shared // Add this line
+    
     
     @State private var playingChannels: [Channel: Bool] = [:]
     @State private var currentPlayer: Channel?
-    @State private var player = AVPlayer()
     
     var body: some View {
-         NavigationView {
-             ScrollView {
-                 LazyVStack(spacing: 1) {
-                     ForEach(channels, id: \.self) { channel in
-                         ChannelRow(channel: channel, isPlaying: playingChannels[channel, default: false], togglePlay: togglePlay)
-                             .padding(.vertical, 5)
-                             .cornerRadius(15)
-                             .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
-                     }
-                 }
-                 .padding(.horizontal)
-                 .background(Color(UIColor.systemGroupedBackground)) // Adapt to light/dark mode
-             }
-             .navigationTitle("Radio Channels")
-             .navigationBarTitleDisplayMode(.large)
-             .background(Color(UIColor.systemGroupedBackground).edgesIgnoringSafeArea(.all))
-         }
-     }
+        NavigationView {
+            ScrollView {
+                LazyVStack(spacing: 1) {
+                    ForEach(channelManager.channels, id: \.self) { channel in
+                        ChannelRow(channel: channel, isPlaying: channelManager.currentChannelIndex == channelManager.channels.firstIndex(of: channel), togglePlay: togglePlay)
+                            .padding(.vertical, 5)
+                            .cornerRadius(15)
+                            .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
+                    }
+                }
+                .padding(.horizontal)
+                .background(Color(UIColor.systemGroupedBackground)) // Adapt to light/dark mode
+            }
+            .navigationTitle("Radio Channels")
+            .navigationBarTitleDisplayMode(.large)
+            .background(Color(UIColor.systemGroupedBackground).edgesIgnoringSafeArea(.all))
+        }
+    }
     
     private func togglePlay(for channel: Channel) {
         if playingChannels[channel, default: false] {
@@ -54,8 +50,8 @@ struct PlayPad: View {
             playingChannels[currentChannel] = false
         }
         let playerItem = AVPlayerItem(url: channel.url)
-        player.replaceCurrentItem(with: playerItem)
-        player.play()
+        audioPlayer.replaceCurrentItem(with: playerItem)
+        audioPlayer.play()
         playingChannels[channel] = true
         currentPlayer = channel
         
@@ -69,7 +65,7 @@ struct PlayPad: View {
     }
     
     private func stopPlayback() {
-        player.pause()
+        audioPlayer.pause()
         if let currentChannel = currentPlayer {
             playingChannels[currentChannel] = false
         }
@@ -80,6 +76,16 @@ struct PlayPad: View {
         } catch {
             print("Error stopping audio session: \(error)")
         }
+    }
+    
+    private func nextChannel() {
+        channelManager.nextChannel()
+        startPlayback(for: channelManager.channels[channelManager.currentChannelIndex])
+    }
+    
+    private func previousChannel() {
+        channelManager.previousChannel()
+        startPlayback(for: channelManager.channels[channelManager.currentChannelIndex])
     }
 }
 

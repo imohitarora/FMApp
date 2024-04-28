@@ -10,7 +10,7 @@ import SwiftUI
 struct ChannelRow: View {
     var channel: Channel
     var isPlaying: Bool
-    var togglePlay: (Channel) -> Void
+    var togglePlay: ((Channel) -> Void)?
 
     var body: some View {
         HStack {
@@ -22,7 +22,7 @@ struct ChannelRow: View {
             Spacer()
 
             Button(action: {
-                togglePlay(channel)
+                togglePlay?(channel)
             }) {
                 Image(systemName: isPlaying ? "pause.circle" : "play.circle")
                     .resizable()
@@ -39,18 +39,10 @@ struct ChannelRow: View {
     
     // Function to return Color based on playing state
     private func background(for isPlaying: Bool) -> Color {
-        return isPlaying ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2)
+        return isPlaying ? Color("PlayingBackground").opacity(0.2) : Color("IdleBackground").opacity(0.5)
     }
 }
 
-// Custom button style
-struct CustomButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .padding(10)
-            .background(Color("ButtonBackground")) // Custom color
-            .foregroundColor(.white)
-            .cornerRadius(10)
-            .scaleEffect(configuration.isPressed ? 0.9 : 1)
-    }
+#Preview {
+    ChannelRow(channel: Channel(name: "CMR Toronto", url: URL(string: "https://live.cmr24.net/CMR/Punjabi-MQ/icecast.audio")!), isPlaying: false)
 }

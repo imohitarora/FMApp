@@ -35,22 +35,24 @@ struct PlayPad: View {
                 .padding(.bottom, isPlaying ? 70 : 0) // Add this
                 .navigationTitle("Radio Channels")
                 .navigationBarTitleDisplayMode(.large)
-                .background(Color(UIColor.systemGroupedBackground).edgesIgnoringSafeArea(.all))
+                .background(Color("Background").edgesIgnoringSafeArea(.all))
             }
             if isPlaying {
                 Spacer()
-                PlaybackControls(
-                    isPlaying: isPlaying,
-                    currentChannel: currentPlayer,
-                    playPauseAction: {
-                        togglePlay(for: currentPlayer!)
-                    },
-                    nextAction: nextChannel,
-                    previousAction: previousChannel
-                )
-                .frame(maxWidth: .infinity)
-                .background(Color("Background"))
-                .shadow(color: Color("Shadow"), radius: 5, x: 0, y: 2)
+                withAnimation(.easeInOut) {
+                    PlaybackControls(
+                        isPlaying: isPlaying,
+                        currentChannel: currentPlayer,
+                        playPauseAction: {
+                            togglePlay(for: currentPlayer!)
+                        },
+                        nextAction: nextChannel,
+                        previousAction: previousChannel
+                    )
+                    .frame(maxWidth: .infinity)
+                    .background(Color("Background"))
+                    .shadow(color: Color("Shadow"), radius: 5, x: 0, y: 2)
+                }
             }
         }
     }

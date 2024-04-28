@@ -65,14 +65,10 @@
 			isa = PBXGroup;
 			children = (
 				C160FBF72BDC68CA00D98571 /* Info.plist */,
-				C160FBD92BDBEA9A00D98571 /* RedFMTorontoApp.swift */,
-				C160FBE72BDC045F00D98571 /* Channel.swift */,
-				C160FBF32BDC612300D98571 /* ChannelRow.swift */,
-				C160FBFA2BDC7AE400D98571 /* PlayerManager.swift */,
-				C160FBF52BDC616700D98571 /* PlayPad.swift */,
-				C160FBF82BDC786A00D98571 /* PlaybackControls.swift */,
-				C160FBDB2BDBEA9A00D98571 /* ContentView.swift */,
-				C160FBFC2BDC7BC100D98571 /* ChannelManager.swift */,
+				C160FC022BDDD48400D98571 /* App */,
+				C160FC032BDDD48A00D98571 /* Model */,
+				C160FC042BDDD49600D98571 /* View */,
+				C160FC052BDDD4B000D98571 /* Services */,
 				C160FBDD2BDBEA9D00D98571 /* Assets.xcassets */,
 				C160FBDF2BDBEA9D00D98571 /* Preview Content */,
 			);
@@ -85,6 +81,42 @@
 				C160FBE02BDBEA9D00D98571 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		C160FC022BDDD48400D98571 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				C160FBD92BDBEA9A00D98571 /* RedFMTorontoApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		C160FC032BDDD48A00D98571 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C160FBE72BDC045F00D98571 /* Channel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		C160FC042BDDD49600D98571 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C160FBF32BDC612300D98571 /* ChannelRow.swift */,
+				C160FBF52BDC616700D98571 /* PlayPad.swift */,
+				C160FBDB2BDBEA9A00D98571 /* ContentView.swift */,
+				C160FBF82BDC786A00D98571 /* PlaybackControls.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		C160FC052BDDD4B000D98571 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				C160FBFC2BDC7BC100D98571 /* ChannelManager.swift */,
+				C160FBFA2BDC7AE400D98571 /* PlayerManager.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

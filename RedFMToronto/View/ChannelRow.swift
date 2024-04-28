@@ -11,16 +11,31 @@ struct ChannelRow: View {
     var channel: Channel
     var isPlaying: Bool
     var togglePlay: ((Channel) -> Void)?
-
+    
     var body: some View {
         HStack {
-            Text(channel.name)
-                .font(.headline)
-                .fontWeight(.medium)
-                .foregroundColor(.primary)
-
+            VStack(alignment: .leading) {
+                Text(channel.name)
+                    .font(.headline)
+                    .fontWeight(.medium)
+                    .foregroundColor(.primary)
+            }
+            .onTapGesture {
+                togglePlay?(channel)
+            }
+            
             Spacer()
-
+            Button(action: {
+                
+            }) {
+                Image(systemName: isPlaying ? "heart.fill" : "heart")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 30, height: 30)
+                    .foregroundColor(.blue)
+            }
+            .buttonStyle(PlainButtonStyle())
+            
             Button(action: {
                 togglePlay?(channel)
             }) {

@@ -26,13 +26,13 @@ struct PlayPad: View {
                             ChannelRow(channel: channel, isPlaying: channelManager.playingChannels[channel, default: false], togglePlay: togglePlay)
                                 .padding(.vertical, 5)
                                 .cornerRadius(15)
-                                .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
+                                .shadow(color: Color("Shadow"), radius: 5, x: 0, y: 2)
                         }
                     }
                     .padding(.horizontal)
-                    .background(Color(UIColor.systemGroupedBackground)) // Adapt to light/dark mode
+                    .background(Color("Background"))
                 }
-                .padding(.bottom, isPlaying ? 50 : 0) // Add this
+                .padding(.bottom, isPlaying ? 70 : 0) // Add this
                 .navigationTitle("Radio Channels")
                 .navigationBarTitleDisplayMode(.large)
                 .background(Color(UIColor.systemGroupedBackground).edgesIgnoringSafeArea(.all))
@@ -49,8 +49,8 @@ struct PlayPad: View {
                     previousAction: previousChannel
                 )
                 .frame(maxWidth: .infinity)
-                .background(Color(UIColor.systemGroupedBackground))
-                .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
+                .background(Color("Background"))
+                .shadow(color: Color("Shadow"), radius: 5, x: 0, y: 2)
             }
         }
     }

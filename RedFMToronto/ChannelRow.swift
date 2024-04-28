@@ -42,3 +42,15 @@ struct ChannelRow: View {
         return isPlaying ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2)
     }
 }
+
+// Custom button style
+struct CustomButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding(10)
+            .background(Color("ButtonBackground")) // Custom color
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            .scaleEffect(configuration.isPressed ? 0.9 : 1)
+    }
+}
